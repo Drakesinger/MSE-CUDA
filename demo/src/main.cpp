@@ -4,8 +4,8 @@
 
 #include "cudaTools.h"
 #include "Device.h"
+#include "cudaTools.h"
 #include "GLUTImageViewers.h"
-#include "Option.h"
 
 using std::cout;
 using std::endl;
@@ -18,8 +18,8 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern int mainGL(Option& option);
-extern int mainFreeGL(Option& option);
+extern int mainGL(void);
+extern int mainFreeGL(void);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -31,9 +31,8 @@ int main(int argc, char** argv);
  |*		Private			*|
  \*-------------------------------------*/
 
-static int use(Option& option);
-static int start(Option& option);
-static void initCuda(Option& option);
+static int start(void);
+static void initCuda(int deviceId);
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -45,28 +44,24 @@ static void initCuda(Option& option);
 
 int main(int argc, char** argv)
     {
-    // Server Cuda1: in [0,5]
-    // Server Cuda2: in [0,2]
-    int DEVICE_ID = 0;
-    bool IS_GL = true;
+    cout << "main" << endl;
 
-    Option option(IS_GL, DEVICE_ID,argc,argv);
-
-    use(option);
-    }
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-int use(Option& option)
-    {
     if (Device::isCuda())
 	{
-	initCuda(option);
-	int isOk = start(option);
+	GLUTImageViewers::init(argc, argv);
 
-	HANDLE_ERROR(cudaDeviceReset()); //cudaDeviceReset causes the driver to clean up all state. While not mandatory in normal operation, it is good practice.
+	//Device::printAll();
+	Device::printAllSimple();
+
+	// Server Cuda1: in [0,5]
+	// Server Cuda2: in [0,2]
+	int deviceId = 3;
+	initCuda(deviceId);
+	int isOk = start();
+
+	//cudaDeviceReset causes the driver to clean up all state.
+	// While not mandatory in normal operation, it is good practice.
+	HANDLE_ERROR(cudaDeviceReset());
 
 	return isOk;
 	}
@@ -76,10 +71,12 @@ int use(Option& option)
 	}
     }
 
-void initCuda(Option& option)
-    {
-    int deviceId = option.getDeviceId();
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
 
+void initCuda(int deviceId)
+    {
     // Check deviceId area
     int nbDevice = Device::getDeviceCount();
     assert(deviceId >= 0 && deviceId < nbDevice);
@@ -87,28 +84,30 @@ void initCuda(Option& option)
     // Choose current device  (state of host-thread)
     HANDLE_ERROR(cudaSetDevice(deviceId));
 
+    // Enable Interoperabilit� OpenGL:
+    //		- Create a cuda specifique contexte, shared between Cuda and GL
+    //		- To be called before first call to kernel
+    //		- cudaSetDevice ou cudaGLSetGLDevice are mutualy exclusive
+    HANDLE_ERROR(cudaGLSetGLDevice(deviceId));
+
     // It can be usefull to preload driver, by example to practice benchmarking! (sometimes slow under linux)
     Device::loadCudaDriver(deviceId);
     // Device::loadCudaDriverAll();// Force driver to be load for all GPU
     }
 
-int start(Option& option)
+int start(void)
     {
-    // print
-	{
-	// Device::printAll();
-	Device::printAllSimple();
-	Device::printCurrent();
-	//Device::print(option.getDeviceId());
-	}
+    Device::printCurrent();
 
-    if (option.isGL())
+    bool IS_GL = true;
+
+    if (IS_GL)
 	{
-	return mainGL(option); // Bloquant, Tant qu'une fenetre est ouverte
+	return mainGL(); // Bloquant, Tant qu'une fenetre est ouverte
 	}
     else
 	{
-	return mainFreeGL(option);
+	return mainFreeGL();
 	}
     }
 

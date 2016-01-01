@@ -53,32 +53,32 @@ int mainGL(Option& option)
     cout << "\n[OpenGL] mode" << endl;
 
     GLUTImageViewers::init(option.getArgc(), option.getArgv());
-    /*Image* ptrRippling = RipplingProvider::createGL();
+    Image* ptrRippling = RipplingProvider::createGL();
     ImageFonctionel* ptrMandel = MandelbrotProvider::createGL();
     ImageFonctionel* ptrNewton = NewtonProvider::createGL();
     Image* ptrRayTracing = RayTracingProvider::createGL();
-    Image* ptrRayTracingSM = RayTracingSMProvider::createGL();*/
+    Image* ptrRayTracingSM = RayTracingSMProvider::createGL();
     Image* ptrRayTracingCM = RayTracingCMProvider::createGL();
     //Image* ptrHeatTransfert = HeatTransfertProvider::createGL();
-    /*ImageFonctionel* ptrMandelMultiGPU = MandelbrotJuliaMultiGPUProvider::createGL();
-    Image* ptrHeatTransfertMulti = HeatTransfertProviderM::createGL();/*
+    ImageFonctionel* ptrMandelMultiGPU = MandelbrotJuliaMultiGPUProvider::createGL();
+    Image* ptrHeatTransfertMulti = HeatTransfertProviderM::createGL();
 
 
-    /*GLUTImageViewers ripplingViewer(ptrRippling, true, false, 0, 0);
+    GLUTImageViewers ripplingViewer(ptrRippling, true, false, 0, 0);
     GLUTImageViewers mandelbrotViewer(ptrMandel, true, false, 300, 0);
     GLUTImageViewers newtonViewer(ptrNewton,true, true, 600, 0);
     GLUTImageViewers rayTracingViewer(ptrRayTracing,true,false,900,0);
-    GLUTImageViewers rayTracingSMViewer(ptrRayTracingSM,true,false,0,300);*/
+    GLUTImageViewers rayTracingSMViewer(ptrRayTracingSM,true,false,0,300);
     GLUTImageViewers rayTracingCMViewer(ptrRayTracingCM,true,false,300,300);
     //GLUTImageViewers ptrHeatTransfertViewer(ptrHeatTransfert,true,false,300,600);
-    /*GLUTImageViewers mandelbrotMultiViewer(ptrMandelMultiGPU, true, false, 600, 300);
-    GLUTImageViewers ptrHeatTransfertViewerMulti(ptrHeatTransfertMulti,true,false,900,300);*/
+    GLUTImageViewers mandelbrotMultiViewer(ptrMandelMultiGPU, true, false, 600, 300);
+    GLUTImageViewers ptrHeatTransfertViewerMulti(ptrHeatTransfertMulti,true,false,900,300);
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
 
     {
-    	/*delete ptrRippling;
+    	delete ptrRippling;
     	delete ptrMandel;
     	delete ptrNewton;
     	delete ptrRayTracing;
@@ -96,7 +96,7 @@ int mainGL(Option& option)
     	ptrRayTracingSM = NULL;
     	ptrRayTracingCM = NULL;
     	//ptrHeatTransfert = NULL;
-    	ptrHeatTransfertMulti = NULL;*/
+    	ptrHeatTransfertMulti = NULL;
     }
 
     return EXIT_SUCCESS;
@@ -109,4 +109,5 @@ int mainGL(Option& option)
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
+
 

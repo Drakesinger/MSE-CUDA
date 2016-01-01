@@ -1,5 +1,5 @@
-#include "RayTracingCM.h"
-#include "RayTracingCMProvider.h"
+#include "RayTracingSM.h"
+#include "RayTracingSMProvider.h"
 
 #include "MathTools.h"
 /*----------------------------------------------------------------------*\
@@ -30,19 +30,19 @@
  |*	static	   *|
  \*----------------*/
 
-Image* RayTracingCMProvider::createGL(void)
+Image* RayTracingSMProvider::createGL(void)
     {
-    Animable_I*  ptrMOO=RayTracingCMProvider::createMOO();
+    Animable_I*  ptrMOO=RayTracingSMProvider::createMOO();
 
     return new Image(ptrMOO);
     }
 
-Animable_I* RayTracingCMProvider::createMOO(void)
+Animable_I* RayTracingSMProvider::createMOO(void)
     {
     int dw=300;
     int dh=300;
 
-    return new RayTracingCM(dw, dh);
+    return new RayTracingSM(dw, dh);
     }
 
 /*--------------------------------------*\

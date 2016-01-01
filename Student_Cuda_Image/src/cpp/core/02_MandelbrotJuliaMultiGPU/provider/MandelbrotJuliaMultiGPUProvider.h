@@ -1,9 +1,8 @@
-#ifndef RAYTRACINGCM_PROVIDER_H_
-#define RAYTRACINGCM_PROVIDER_H_
+#ifndef MANDELBROTJULIAMULTIGPU_PROVIDER_H_
+#define MANDELBROTJULIAMULTIGPU_PROVIDER_H_
 
-#include "cudaType.h"
-#include "Image.h"
-#include "VariateurI.h"
+#include "MandelbrotJuliaMultiGPU.h"
+#include "ImageFonctionel.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -13,13 +12,11 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class RayTracingCMProvider
+class MandelbrotJuliaMultiGPUProvider
     {
     public:
-
-	static Image* createGL(void);
-	static Animable_I* createMOO(void);
-
+	static MandelbrotJuliaMultiGPU* create(void);
+	static ImageFonctionel* createGL(void);
     };
 
 #endif
@@ -27,4 +24,3 @@ class RayTracingCMProvider
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-

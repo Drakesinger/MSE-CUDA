@@ -1,7 +1,6 @@
-#include "RayTracingCM.h"
-#include "RayTracingCMProvider.h"
+#include "HeatTransfertProviderM.h"
 
-#include "MathTools.h"
+
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
@@ -30,20 +29,20 @@
  |*	static	   *|
  \*----------------*/
 
-Image* RayTracingCMProvider::createGL(void)
+HeatTransfertM* HeatTransfertProviderM::createMOO()
     {
-    Animable_I*  ptrMOO=RayTracingCMProvider::createMOO();
+    float dt = 1;
 
-    return new Image(ptrMOO);
+    int dw = 300; // =32*30=960
+    int dh = 300; // =32*30=960
+
+    return new HeatTransfertM(dw, dh, dt);
     }
 
-Animable_I* RayTracingCMProvider::createMOO(void)
-    {
-    int dw=300;
-    int dh=300;
-
-    return new RayTracingCM(dw, dh);
-    }
+ Image* HeatTransfertProviderM::createGL(void)
+     {
+     return new Image(createMOO());
+     }
 
 /*--------------------------------------*\
  |*		Private			*|

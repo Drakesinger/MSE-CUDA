@@ -90,12 +90,12 @@ RayTracingCM::RayTracingCM(int w, int h)
 	}
 
     // Outputs
-    this->title = "RayTracingCM_Cuda_constant";
+    this->title = "RayTracing Constant Memory";
 
     //print(dg, db);
     Device::assertDim(dg, db);
 
-    // Recup��ration de la constantMemory CM du device
+    // Recupération de la constantMemory CM du device
     ConstantMemoryLink cmLink = constantMemoryLink();
     ptrDevTabData = (Sphere*)cmLink.ptrDevTab;
     size_t sizeALL = cmLink.sizeAll;
@@ -119,24 +119,6 @@ RayTracingCM::~RayTracingCM()
 void RayTracingCM::process(uchar4* ptrDevPixels, int w, int h)
 {
     raytracingCM<<<dg,db>>>(ptrDevPixels,ptrDevTabData,NBSPHERE, w, h, this->t);
-    //delete[] tabValue;
-
-
-
-/*    size_t size= NBSPHERE *sizeof(float);
-    int offset=0;
-
-    HANDLE_ERROR(cudaMemcpyToSymbol(tabSphere,
-    &tabValue, size, offset,cudaMemcpyHostToDevice));
-
-
-    Sphere* ptrDevSphere=NULL;
-    //size_t size = NBSPHERE*sizeof(Sphere);
-    HANDLE_ERROR(cudaMalloc(&ptrDevSphere,size));
-    //HANDLE_ERROR(cudaMemcpy(ptrDevSphere, tabSphere,size,cudaMemcpyHostToDevice));
-    raytracing<<<dg,db>>>(ptrDevPixels,ptrDevSphere,NBSPHERE, w, h, this->t);
-
-    HANDLE_ERROR(cudaFree(ptrDevSphere));*/
 }
 
 /**

@@ -1,9 +1,8 @@
-#ifndef RAYTRACINGCM_PROVIDER_H_
-#define RAYTRACINGCM_PROVIDER_H_
+#ifndef HEATTRANSFERT_PROVIDER_H_
+#define HEATTRANSFERT_PROVIDER_H_
 
-#include "cudaType.h"
+#include "HeatTransfert.h"
 #include "Image.h"
-#include "VariateurI.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -13,12 +12,12 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class RayTracingCMProvider
+class HeatTransfertProvider
     {
     public:
 
+	static HeatTransfert* create(void);
 	static Image* createGL(void);
-	static Animable_I* createMOO(void);
 
     };
 

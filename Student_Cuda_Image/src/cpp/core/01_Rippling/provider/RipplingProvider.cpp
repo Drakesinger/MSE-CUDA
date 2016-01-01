@@ -31,8 +31,8 @@
 
 Rippling* RipplingProvider::create()
     {
-    int dw = 1024;
-    int dh = 1024;
+    int dw = 300;
+    int dh = 300;
 
     float dt = 2 * PI / 400;
 

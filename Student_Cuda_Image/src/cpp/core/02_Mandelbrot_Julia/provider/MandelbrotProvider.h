@@ -1,9 +1,8 @@
-#ifndef RAYTRACINGCM_PROVIDER_H_
-#define RAYTRACINGCM_PROVIDER_H_
+#ifndef MANDELBROT_PROVIDER_H_
+#define MANDELBROT_PROVIDER_H_
 
-#include "cudaType.h"
-#include "Image.h"
-#include "VariateurI.h"
+#include "Mandelbrot.h"
+#include "ImageFonctionel.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -13,13 +12,12 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class RayTracingCMProvider
+class MandelbrotProvider
     {
     public:
 
-	static Image* createGL(void);
-	static Animable_I* createMOO(void);
-
+	static Mandelbrot* create(void);
+	static ImageFonctionel* createGL(void);
     };
 
 #endif

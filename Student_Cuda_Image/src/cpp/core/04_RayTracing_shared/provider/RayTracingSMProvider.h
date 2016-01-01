@@ -1,5 +1,5 @@
-#ifndef RAYTRACINGCM_PROVIDER_H_
-#define RAYTRACINGCM_PROVIDER_H_
+#ifndef RAYTRACINGSM_PROVIDER_H_
+#define RAYTRACINGSM_PROVIDER_H_
 
 #include "cudaType.h"
 #include "Image.h"
@@ -13,7 +13,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class RayTracingCMProvider
+class RayTracingSMProvider
     {
     public:
 

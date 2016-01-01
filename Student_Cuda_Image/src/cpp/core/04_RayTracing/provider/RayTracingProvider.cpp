@@ -39,10 +39,8 @@ Image* RayTracingProvider::createGL(void)
 
 Animable_I* RayTracingProvider::createMOO(void)
     {
-    //int dw = 16 * 60 *2; // =32*30=960
-    //int dh = 16 * 60; // =32*30=960
-    int dw=800;
-    int dh=600;
+    int dw=300;
+    int dh=300;
 
     return new RayTracing(dw, dh);
     }

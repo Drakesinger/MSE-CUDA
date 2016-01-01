@@ -39,7 +39,6 @@ __host__  void addVecteur(float* ptrV1, float* ptrV2, float* ptrW,int n);
 __host__ void addVecteur(float* ptrV1, float* ptrV2, float* ptrW, int n)
     {
     float* ptrDevV1 = NULL;
-    float* ptrDevV2 = NULL;
     float* ptrDevW = NULL;
     size_t size = n * sizeof(float); // octet
 
@@ -62,7 +61,7 @@ __host__ void addVecteur(float* ptrV1, float* ptrV2, float* ptrW, int n)
     Device::checkLastCudaError("addVecteur"); // facultatif
     Device::synchronize(); // Temp, only for printf in  GPU
 
-    HANDLE_ERROR(cudaMemcpy(ptrW, ptrDevW, size, cudaMemcpyDeviceToHost)); // barrière synchronisation implicite
+    HANDLE_ERROR(cudaMemcpy(ptrW, ptrDevW, size, cudaMemcpyDeviceToHost)); // barriï¿½re synchronisation implicite
 
     HANDLE_ERROR(cudaFree(ptrDevV1));
     // TODO ptrV2 et ptrW

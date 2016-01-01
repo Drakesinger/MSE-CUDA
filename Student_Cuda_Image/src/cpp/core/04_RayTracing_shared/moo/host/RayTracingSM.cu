@@ -2,23 +2,30 @@
 #include <assert.h>
 
 #include "IntervalF_GPU.h"
-#include "RayTracing.h"
+#include "RayTracingSM.h"
 #include "Device.h"
 #include "cudaTools.h"
 #include "AleaTools.h"
+#include "ConstantMemoryLink.h"
+
 
 using std::cout;
 using std::endl;
+
+
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
 
+
+
+
 /*--------------------------------------*\
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void raytracing(uchar4* ptrDevPixels, Sphere* ptrDevSphere, int nbSphere, int w, int h, float t);
+extern __global__ void raytracingSM(uchar4* ptrDevPixels, Sphere* ptrDevSphere, int nbSphere, int w, int h, float t);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -27,6 +34,7 @@ extern __global__ void raytracing(uchar4* ptrDevPixels, Sphere* ptrDevSphere, in
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -40,42 +48,40 @@ extern __global__ void raytracing(uchar4* ptrDevPixels, Sphere* ptrDevSphere, in
  |*	Constructeur	    *|
  \*-------------------------*/
 
-RayTracing::RayTracing(int w, int h)
+RayTracingSM::RayTracingSM(int w, int h)
     {
     // Inputs
     this->w = w;
     this->h = h;
     this->t=0;
-
+    nbSphere=50;
     //Tools
-    this->dg = dim3(16, 2, 1);
-    this->db = dim3(32, 4, 1);
-    this->nbSphere = 50;
-    this->tabSphere = new Sphere[nbSphere];
-
+    this->dg = dim3(32, 4, 1);
+    this->db = dim3(64, 8, 1);
+    this->tabValue = new Sphere[nbSphere];
     AleaTools aleaTools = AleaTools();
     float bord = 200;
     for(int i=0;i<nbSphere;i++)
 	{
-	//TODO random
 	float rayon = aleaTools.uniformeAB(20, this->w/10);
 	float x = aleaTools.uniformeAB(bord, this->h -bord);
 	float y = aleaTools.uniformeAB(bord, this->w -bord);
 	float z = aleaTools.uniformeAB(10, 2* this->w);
 	float hue = aleaTools.uniforme01();
-	tabSphere[i] = Sphere(x,y,z,rayon,hue);
+	tabValue[i] = Sphere(x,y,z,rayon,hue);
 	}
 
     // Outputs
-    this->title = "RayTracing";
+    this->title = "RayTracing Shared Memory";
 
     //print(dg, db);
     Device::assertDim(dg, db);
+
     }
 
-RayTracing::~RayTracing()
+RayTracingSM::~RayTracingSM()
     {
-    delete[] tabSphere;
+    delete[] tabValue;
     }
 
 /*-------------------------*\
@@ -85,13 +91,15 @@ RayTracing::~RayTracing()
 /**
  * Override
  */
-void RayTracing::process(uchar4* ptrDevPixels, int w, int h)
+void RayTracingSM::process(uchar4* ptrDevPixels, int w, int h)
 {
+
+
     Sphere* ptrDevSphere=NULL;
     size_t size = nbSphere*sizeof(Sphere);
     HANDLE_ERROR(cudaMalloc(&ptrDevSphere,size));
-    HANDLE_ERROR(cudaMemcpy(ptrDevSphere, this->tabSphere,size,cudaMemcpyHostToDevice));
-    raytracing<<<dg,db>>>(ptrDevPixels,ptrDevSphere,this->nbSphere, w, h, this->t);
+    HANDLE_ERROR(cudaMemcpy(ptrDevSphere, tabValue,size,cudaMemcpyHostToDevice));
+    raytracingSM<<<dg,db,size>>>(ptrDevPixels,ptrDevSphere,this->nbSphere, w, h, this->t);
 
     HANDLE_ERROR(cudaFree(ptrDevSphere));
 }
@@ -99,9 +107,9 @@ void RayTracing::process(uchar4* ptrDevPixels, int w, int h)
 /**
  * Override
  */
-void RayTracing::animationStep()
+void RayTracingSM::animationStep()
 {
-    t+=3.14/200;
+    t+=0.1;
 }
 
 /*--------------*\
@@ -111,17 +119,15 @@ void RayTracing::animationStep()
 /**
  * Override
  */
-float RayTracing::getAnimationPara(void)
+float RayTracingSM::getAnimationPara(void)
 {
-//return n;
-//variateurN.get();
     return t;
 }
 
 /**
  * Override
  */
-int RayTracing::getW(void)
+int RayTracingSM::getW(void)
 {
 return w;
 }
@@ -129,7 +135,7 @@ return w;
 /**
  * Override
  */
-int RayTracing::getH(void)
+int RayTracingSM::getH(void)
 {
 return h;
 }
@@ -137,7 +143,7 @@ return h;
 /**
  * Override
  */
-string RayTracing::getTitle(void)
+string RayTracingSM::getTitle(void)
 {
 return title;
 }
@@ -145,6 +151,8 @@ return title;
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+
+
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|

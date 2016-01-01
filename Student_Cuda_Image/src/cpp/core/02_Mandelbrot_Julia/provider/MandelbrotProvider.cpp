@@ -1,7 +1,6 @@
-#include "RayTracingCM.h"
-#include "RayTracingCMProvider.h"
-
+#include "MandelbrotProvider.h"
 #include "MathTools.h"
+
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
@@ -30,19 +29,24 @@
  |*	static	   *|
  \*----------------*/
 
-Image* RayTracingCMProvider::createGL(void)
+Mandelbrot* MandelbrotProvider::create()
     {
-    Animable_I*  ptrMOO=RayTracingCMProvider::createMOO();
+    int dw = 300; // =32*30=960
+    int dh = 300; // =32*30=960
 
-    return new Image(ptrMOO);
+    float dt = 2 * PI / 8000;
+
+    int nMin = 30;
+    int nMax = 100;
+
+    return new Mandelbrot(dw, dh, nMin, nMax);
     }
 
-Animable_I* RayTracingCMProvider::createMOO(void)
+ImageFonctionel* MandelbrotProvider::createGL(void)
     {
-    int dw=300;
-    int dh=300;
+    ColorRGB_01* ptrColorTitre=new ColorRGB_01(0,0,0);
 
-    return new RayTracingCM(dw, dh);
+    return new ImageFonctionel(create(),ptrColorTitre); // both ptr destroy by destructor of ImageFonctionel
     }
 
 /*--------------------------------------*\
